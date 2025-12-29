@@ -22,4 +22,8 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PRService.Application\PRService.Application.csproj" />
+  </ItemGroup>
+
 </Project>
