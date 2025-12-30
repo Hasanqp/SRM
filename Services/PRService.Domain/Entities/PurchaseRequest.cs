@@ -6,7 +6,7 @@ namespace PRService.Domain.Entities
 {
     public class PurchaseRequest : EntityBase
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public string RequestNumber { get; private set; }
         public string Description { get; private set; }
         public decimal TotalAmount { get; private set; }
@@ -87,18 +87,6 @@ namespace PRService.Domain.Entities
             Status = PRStatus.Rejected;
             RejectionReason = reason;
             RejectedDate = DateTime.UtcNow;
-        }
-
-        public void ReturnToDraft()
-        {
-            // Rule Can only return to draft from Submitted
-            if (Status != PRStatus.Submitted)
-            {
-                throw new InvalidStatusTransitionException(Status, PRStatus.Draft);
-            }
-
-            Status = PRStatus.Draft;
-            SubmittedDate = null;
         }
 
         // Private validation methods
