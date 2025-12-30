@@ -1,0 +1,18 @@
+@startuml
+actor Buyer
+actor Approver
+participant "PR API" as API
+participant "PurchaseRequest\nDomain" as Domain
+
+Buyer -> API : Create PR
+API -> Domain : new PurchaseRequest()
+Domain --> API : PR (Draft)
+
+Buyer -> API : Submit PR
+API -> Domain : Submit()
+Domain --> API : Status = Submitted
+
+Approver -> API : Approve PR
+API -> Domain : Approve()
+Domain --> API : Status = Approved
+@enduml
