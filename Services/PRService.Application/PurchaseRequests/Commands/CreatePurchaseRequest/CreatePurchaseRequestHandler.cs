@@ -1,28 +1,30 @@
-﻿using PRService.Application.Abstractions.Persistence;
+﻿using MediatR;
+using PRService.Application.Abstractions.Persistence;
 using PRService.Domain.Entities;
 
 namespace PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest
 {
-    public sealed class CreatePurchaseRequestHandler
+    public sealed class CreatePurchaseRequestHandler : IRequestHandler<CreatePurchaseRequestCommand, CreatePurchaseRequestResult>
     {
-        private readonly IPurchaseRequestRepository _repository;
-
-        public CreatePurchaseRequestHandler(IPurchaseRequestRepository repository)
+        public Task<CreatePurchaseRequestResult> Handle(CreatePurchaseRequestCommand request, CancellationToken cancellationToken)
         {
-            _repository = repository;
-        }
-
-        public async Task<Guid> Handle(CreatePurchaseRequestCommand command, CancellationToken cancellationToken)
-        {
-            var purchaseRequest = new PurchaseRequest(
-                command.RequestNumber,
-                command.Description,
-                command.TotalAmount
+            // Create the Domain Entity
+            var pr = new PurchaseRequest(
+                request.RequestNumber,
+                request.Description,
+                request.TotalAmount
             );
 
-            await _repository.AddAsync(purchaseRequest, cancellationToken);
+            // later Save to DB + Publish Event
 
-            return purchaseRequest.Id;
+            return Task.FromResult(
+                new CreatePurchaseRequestResult(
+                    pr.Id,
+                    pr.RequestNumber,
+                    pr.Status.ToString(),
+                    pr.CreatedDate
+                )
+            );
         }
     }
 }

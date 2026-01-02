@@ -1,8 +1,10 @@
-﻿namespace PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest
+﻿using MediatR;
+
+namespace PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest
 {
     public sealed record CreatePurchaseRequestCommand(
         string RequestNumber,
         string Description,
         decimal TotalAmount
-    );
+    ) : IRequest<CreatePurchaseRequestResult>;
 }
