@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PRService.API.Contracts.Common;
 using PRService.API.Contracts.PurchaseRequests;
 using PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest;
+using PRService.Application.PurchaseRequests.Commands.RejectPurchaseRequest;
 
 namespace PRService.API.Controllers
 {
@@ -32,6 +34,19 @@ namespace PRService.API.Controllers
                 nameof(Create),
                 new { id = result.Id },
                 result);
+        }
+
+        [HttpPost("{id:guid}/reject")]
+        public async Task<IActionResult> Reject(
+            Guid id,
+            [FromBody] RejectRequest request,
+            CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new RejectPurchaseRequestCommand(id, request.Reason),
+                cancellationToken);
+
+            return NoContent();
         }
     }
 }
