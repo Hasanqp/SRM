@@ -1,3 +1,4 @@
+using PRService.API.Middleware;
 using PRService.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Global exception handling
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthorization();
 
