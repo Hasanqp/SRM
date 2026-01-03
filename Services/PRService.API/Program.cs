@@ -1,5 +1,6 @@
 using PRService.API.Middleware;
 using PRService.Application;
+using PRService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 // Add MediatR
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
