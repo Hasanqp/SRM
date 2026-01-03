@@ -4,6 +4,7 @@ using PRService.API.Contracts.Common;
 using PRService.API.Contracts.PurchaseRequests;
 using PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.RejectPurchaseRequest;
+using PRService.Application.PurchaseRequests.Commands.SubmitPurchaseRequest;
 
 namespace PRService.API.Controllers
 {
@@ -34,6 +35,18 @@ namespace PRService.API.Controllers
                 nameof(Create),
                 new { id = result.Id },
                 result);
+        }
+
+        [HttpPost("{id:guid}/submit")]
+        public async Task<IActionResult> Submit(
+            Guid id,
+            CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new SubmitPurchaseRequestCommand(id),
+                cancellationToken);
+
+            return NoContent();
         }
 
         [HttpPost("{id:guid}/reject")]
