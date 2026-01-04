@@ -6,7 +6,13 @@ namespace PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest
 {
     public sealed class CreatePurchaseRequestHandler : IRequestHandler<CreatePurchaseRequestCommand, CreatePurchaseRequestResult>
     {
-        public Task<CreatePurchaseRequestResult> Handle(CreatePurchaseRequestCommand request, CancellationToken cancellationToken)
+        private readonly IPurchaseRequestRepository _repository;
+
+        public CreatePurchaseRequestHandler(IPurchaseRequestRepository repository)
+        {
+            _repository = repository;
+        }
+        public async Task<CreatePurchaseRequestResult> Handle(CreatePurchaseRequestCommand request, CancellationToken cancellationToken)
         {
             // Create the Domain Entity
             var pr = new PurchaseRequest(
@@ -16,14 +22,13 @@ namespace PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest
             );
 
             // later Save to DB + Publish Event
+            await _repository.AddAsync(pr, cancellationToken);
 
-            return Task.FromResult(
-                new CreatePurchaseRequestResult(
+            return new CreatePurchaseRequestResult(
                     pr.Id,
                     pr.RequestNumber,
                     pr.Status.ToString(),
                     pr.CreatedDate
-                )
             );
         }
     }

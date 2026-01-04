@@ -2,7 +2,7 @@
 
 namespace PRService.Domain.Exceptions
 {
-    public class InvalidStatusTransitionException : DomainException
+    public sealed class InvalidStatusTransitionException : DomainException
     {
         public PRStatus CurrentStatus { get; }
         public PRStatus TargetStatus { get; }

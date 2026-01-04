@@ -5,6 +5,7 @@ using PRService.API.Contracts.PurchaseRequests;
 using PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.RejectPurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.SubmitPurchaseRequest;
+using PRService.Application.PurchaseRequests.Queries.GetPurchaseRequestById;
 
 namespace PRService.API.Controllers
 {
@@ -61,5 +62,18 @@ namespace PRService.API.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(
+            Guid id,
+            CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(
+                new GetPurchaseRequestByIdQuery(id),
+                cancellationToken);
+
+            return Ok(result);
+        }
+
     }
 }

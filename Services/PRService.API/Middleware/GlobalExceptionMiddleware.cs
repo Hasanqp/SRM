@@ -23,37 +23,59 @@ namespace PRService.API.Middleware
             {
                 await _next(context);
             }
-            catch (InvalidStatusTransitionException ex)
-            {
-                await HandleException(
-                    context,
-                    HttpStatusCode.BadRequest,
-                    "INVALID_OPERATION",
-                    ex.Message
-                );
-            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled exception");
-
-                await HandleException(
-                    context,
-                    HttpStatusCode.InternalServerError,
-                    "INTERNAL_SERVER_ERROR",
-                    "Something went wrong"
-                );
+                _logger.LogError(ex, ex.Message);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private static async Task HandleException(HttpContext context, HttpStatusCode statusCode, string code, string message)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)statusCode;
+            var (statusCode, response) = exception switch
+            {
+                // 409 Conflict
+                InvalidStatusTransitionException ex => (
+                    HttpStatusCode.Conflict,
+                    new ErrorResponse(
+                        "INVALID_STATUS_TRANSITION",
+                        ex.Message
+                    )
+                ),
 
-                var response = new ErrorResponse(code, message);
+                // 404 Not Found
+                NotFoundException ex => (
+                    HttpStatusCode.NotFound,
+                    new ErrorResponse(
+                        "NOT_FOUND",
+                        ex.Message
+                    )
+                ),
 
-                await context.Response.WriteAsync(
-                    JsonSerializer.Serialize(response));
+                // 400 Bad Request
+                DomainException ex => (
+                    HttpStatusCode.BadRequest,
+                    new ErrorResponse(
+                        "DOMAIN_ERROR",
+                        ex.Message
+                    )
+                ),
+
+                // 500 Internal Server Error
+                _ => (
+                    HttpStatusCode.InternalServerError,
+                    new ErrorResponse(
+                        "INTERNAL_SERVER_ERROR",
+                        "Something went wrong"
+                    )
+                )
+            };
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)statusCode;
+
+            await context.Response.WriteAsync(
+                JsonSerializer.Serialize(response));
         }
     }
 }
