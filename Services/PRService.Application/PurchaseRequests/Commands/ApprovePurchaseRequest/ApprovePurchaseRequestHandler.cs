@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PRService.Application.Abstractions.Persistence;
+using PRService.Domain.Exceptions;
 
 namespace PRService.Application.PurchaseRequests.Commands.ApprovePurchaseRequest
 {
@@ -14,14 +15,15 @@ namespace PRService.Application.PurchaseRequests.Commands.ApprovePurchaseRequest
         public async Task Handle(ApprovePurchaseRequestCommand request, CancellationToken cancellationToken)
         {
             var pr = await _repository.GetByIdAsync(
-                request.PurchaseRequestId, cancellationToken);
+                request.PurchaseRequestId,
+                cancellationToken);
 
             if (pr is null)
             {
-                throw new Domain.Exceptions.InvalidOperationException(
-                    "Approve PR",
-                    "Purchase request not found"
-                );
+                throw new NotFoundException(
+                    "PurchaseRequest",
+                    request.PurchaseRequestId.ToString());
+
             }
 
             // Domain enforces business rules

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PRService.API.Contracts.Common;
 using PRService.API.Contracts.PurchaseRequests;
+using PRService.Application.PurchaseRequests.Commands.ApprovePurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.RejectPurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.SubmitPurchaseRequest;
@@ -62,6 +63,19 @@ namespace PRService.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id:guid}/approve")]
+        public async Task<IActionResult> Approve(
+            Guid id,
+            CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new ApprovePurchaseRequestCommand(id),
+                cancellationToken);
+
+            return NoContent();
+        }
+
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(
