@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PRService.API.Contracts.Common;
 using PRService.API.Contracts.PurchaseRequests;
@@ -21,6 +22,7 @@ namespace PRService.API.Controllers
             _mediator = mediator;
         }
 
+        [Authorize(Policy = "BuyerPolicy")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreatePurchaseRequestRequest request, CancellationToken cancellationToken)
         {
@@ -38,6 +40,7 @@ namespace PRService.API.Controllers
                 result);
         }
 
+        [Authorize(Policy = "BuyerPolicy")]
         [HttpPost("{id:guid}/submit")]
         public async Task<IActionResult> Submit(Guid id, CancellationToken cancellationToken)
         {
@@ -48,6 +51,7 @@ namespace PRService.API.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "ApproverPolicy")]
         [HttpPost("{id:guid}/reject")]
         public async Task<IActionResult> Reject(Guid id, [FromBody] RejectRequest request, CancellationToken cancellationToken)
         {
@@ -58,6 +62,7 @@ namespace PRService.API.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "ApproverPolicy")]
         [HttpPost("{id:guid}/approve")]
         public async Task<IActionResult> Approve(Guid id, CancellationToken cancellationToken)
         {
@@ -68,7 +73,7 @@ namespace PRService.API.Controllers
             return NoContent();
         }
 
-
+        [Authorize]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
@@ -79,6 +84,7 @@ namespace PRService.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
