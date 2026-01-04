@@ -7,5 +7,8 @@ namespace PRService.Application.Abstractions.Persistence
         Task AddAsync(PurchaseRequest purchaseRequest, CancellationToken cancellationToken);
         Task<PurchaseRequest?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task UpdateAsync(PurchaseRequest purchaseRequest, CancellationToken cancellationToken);
+
+        // Extend IPurchaseRequestRepository with GetAllAsync
+        Task<IReadOnlyList<PurchaseRequest>> GetAllAsync(CancellationToken cancellationToken);
     }
 }

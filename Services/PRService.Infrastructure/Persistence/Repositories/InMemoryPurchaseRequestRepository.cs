@@ -24,5 +24,13 @@ namespace PRService.Infrastructure.Persistence.Repositories
             _store[purchaseRequest.Id] = purchaseRequest;
             return Task.CompletedTask;
         }
+
+        public Task<IReadOnlyList<PurchaseRequest>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            IReadOnlyList<PurchaseRequest> result =
+                _store.Values.ToList();
+
+            return Task.FromResult(result);
+        }
     }
 }

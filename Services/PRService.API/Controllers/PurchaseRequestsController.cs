@@ -7,6 +7,7 @@ using PRService.Application.PurchaseRequests.Commands.CreatePurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.RejectPurchaseRequest;
 using PRService.Application.PurchaseRequests.Commands.SubmitPurchaseRequest;
 using PRService.Application.PurchaseRequests.Queries.GetPurchaseRequestById;
+using PRService.Application.PurchaseRequests.Queries.GetPurchaseRequests;
 
 namespace PRService.API.Controllers
 {
@@ -21,9 +22,7 @@ namespace PRService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(
-            [FromBody] CreatePurchaseRequestRequest request,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] CreatePurchaseRequestRequest request, CancellationToken cancellationToken)
         {
             var command = new CreatePurchaseRequestCommand(
                 request.RequestNumber,
@@ -40,9 +39,7 @@ namespace PRService.API.Controllers
         }
 
         [HttpPost("{id:guid}/submit")]
-        public async Task<IActionResult> Submit(
-            Guid id,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Submit(Guid id, CancellationToken cancellationToken)
         {
             await _mediator.Send(
                 new SubmitPurchaseRequestCommand(id),
@@ -52,10 +49,7 @@ namespace PRService.API.Controllers
         }
 
         [HttpPost("{id:guid}/reject")]
-        public async Task<IActionResult> Reject(
-            Guid id,
-            [FromBody] RejectRequest request,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Reject(Guid id, [FromBody] RejectRequest request, CancellationToken cancellationToken)
         {
             await _mediator.Send(
                 new RejectPurchaseRequestCommand(id, request.Reason),
@@ -65,9 +59,7 @@ namespace PRService.API.Controllers
         }
 
         [HttpPost("{id:guid}/approve")]
-        public async Task<IActionResult> Approve(
-            Guid id,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Approve(Guid id, CancellationToken cancellationToken)
         {
             await _mediator.Send(
                 new ApprovePurchaseRequestCommand(id),
@@ -78,9 +70,7 @@ namespace PRService.API.Controllers
 
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(
-            Guid id,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(
                 new GetPurchaseRequestByIdQuery(id),
@@ -89,5 +79,14 @@ namespace PRService.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(
+                new GetPurchaseRequestsQuery(),
+                cancellationToken);
+
+            return Ok(result);
+        }
     }
 }
