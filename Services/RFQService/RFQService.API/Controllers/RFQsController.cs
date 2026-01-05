@@ -7,6 +7,7 @@ using RFQService.Application.RFQs.Commands.CloseRFQ;
 using RFQService.Application.RFQs.Commands.CreateRFQ;
 using RFQService.Application.RFQs.Commands.SendRFQ;
 using RFQService.Application.RFQs.Commands.SubmitBid;
+using RFQService.Application.RFQs.Queries.GetRFQById;
 
 namespace RFQService.API.Controllers
 {
@@ -79,5 +80,14 @@ namespace RFQService.API.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(
+                new GetRFQByIdQuery(id),
+                cancellationToken);
+
+            return Ok(result);
+        }
     }
 }
