@@ -44,9 +44,20 @@ namespace RFQService.Domain.Entities
             if (Status != RFQStatus.SentToVendors)
                 throw new InvalidRFQStateException(Status, RFQStatus.Awarded);
 
+            if (!Bids.Any(b => b.Id == bidId))
+                throw new BidNotFoundException(bidId);
+
             WinningBidId = bidId;
             Status = RFQStatus.Awarded;
+
+            CloseAfterAward();
         }
+
+        private void CloseAfterAward()
+        {
+            Status = RFQStatus.Closed;
+        }
+
 
 
         public void Close()
