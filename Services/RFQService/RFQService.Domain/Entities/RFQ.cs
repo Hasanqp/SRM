@@ -12,6 +12,7 @@ namespace RFQService.Domain.Entities
         public Guid PurchaseRequestId { get; private set; }
         public string Title { get; private set; }
         public RFQStatus Status { get; private set; }
+        public Guid? WinningBidId { get; private set; }
         public DateTime CreatedDate { get; private set; }
 
         private RFQ() { }
@@ -37,6 +38,16 @@ namespace RFQService.Domain.Entities
 
             Status = RFQStatus.SentToVendors;
         }
+
+        public void Award(Guid bidId)
+        {
+            if (Status != RFQStatus.SentToVendors)
+                throw new InvalidRFQStateException(Status, RFQStatus.Awarded);
+
+            WinningBidId = bidId;
+            Status = RFQStatus.Awarded;
+        }
+
 
         public void Close()
         {

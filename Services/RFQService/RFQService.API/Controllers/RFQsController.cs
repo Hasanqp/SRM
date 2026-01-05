@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RFQService.API.Contracts.Bids;
 using RFQService.API.Contracts.RFQs;
+using RFQService.Application.RFQs.Commands.AwardRFQ;
 using RFQService.Application.RFQs.Commands.CancelRFQ;
 using RFQService.Application.RFQs.Commands.CloseRFQ;
 using RFQService.Application.RFQs.Commands.CreateRFQ;
@@ -89,5 +90,18 @@ namespace RFQService.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("{id:guid}/award")]
+        public async Task<IActionResult> Award(Guid id, [FromBody] AwardRFQRequest request, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new AwardRFQCommand(
+                    id,
+                    request.BidId),
+                cancellationToken);
+
+            return NoContent();
+        }
+
     }
 }

@@ -4,7 +4,8 @@
     {
         Draft = 0,
         SentToVendors = 1,
-        Closed = 2,
-        Cancelled = 3
+        Awarded = 2,
+        Closed = 3,
+        Cancelled = 4
     }
 }
