@@ -1,4 +1,5 @@
 ﻿using RFQService.Domain.Enums;
+using RFQService.Domain.Exceptions;
 
 namespace RFQService.Domain.Entities
 {
