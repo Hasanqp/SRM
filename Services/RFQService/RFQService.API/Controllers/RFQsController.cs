@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RFQService.API.Contracts.RFQs;
 using RFQService.Application.RFQs.Commands.CreateRFQ;
+using RFQService.Application.RFQs.Commands.SendRFQ;
 
 namespace RFQService.API.Controllers
 {
@@ -29,6 +30,16 @@ namespace RFQService.API.Controllers
                 nameof(Create),
                 new { id = result.Id },
                 result);
+        }
+
+        [HttpPost("{id:guid}/send")]
+        public async Task<IActionResult> SendToVendors(Guid id, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new SendRFQCommand(id),
+                cancellationToken);
+
+            return NoContent();
         }
     }
 }
