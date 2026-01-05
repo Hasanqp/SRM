@@ -5,6 +5,9 @@ namespace RFQService.Domain.Entities
 {
     public sealed class RFQ
     {
+        private readonly List<Bid> _bids = new();
+        public IReadOnlyCollection<Bid> Bids => _bids.AsReadOnly();
+
         public Guid Id { get; private set; }
         public Guid PurchaseRequestId { get; private set; }
         public string Title { get; private set; }
@@ -51,5 +54,14 @@ namespace RFQService.Domain.Entities
             Status = RFQStatus.Cancelled;
         }
 
+        public void SubmitBid(Guid supplierId, decimal amount)
+        {
+            if (Status != RFQStatus.SentToVendors)
+                throw new InvalidRFQStateException(
+                    Status,
+                    RFQStatus.SentToVendors);
+
+            _bids.Add(new Bid(supplierId, amount));
+        }
     }
 }

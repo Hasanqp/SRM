@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RFQService.API.Contracts.Bids;
 using RFQService.API.Contracts.RFQs;
 using RFQService.Application.RFQs.Commands.CancelRFQ;
 using RFQService.Application.RFQs.Commands.CloseRFQ;
 using RFQService.Application.RFQs.Commands.CreateRFQ;
 using RFQService.Application.RFQs.Commands.SendRFQ;
+using RFQService.Application.RFQs.Commands.SubmitBid;
 
 namespace RFQService.API.Controllers
 {
@@ -63,5 +65,19 @@ namespace RFQService.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id:guid}/bids")]
+        public async Task<IActionResult> SubmitBid(Guid id, [FromBody] SubmitBidRequest request, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new SubmitBidCommand(
+                    id,
+                    request.SupplierId,
+                    request.Amount),
+                cancellationToken);
+
+            return NoContent();
+        }
+
     }
 }
