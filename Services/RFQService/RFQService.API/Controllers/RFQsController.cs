@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RFQService.API.Contracts.RFQs;
+using RFQService.Application.RFQs.Commands.CloseRFQ;
 using RFQService.Application.RFQs.Commands.CreateRFQ;
 using RFQService.Application.RFQs.Commands.SendRFQ;
 
@@ -41,5 +42,16 @@ namespace RFQService.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id:guid}/close")]
+        public async Task<IActionResult> Close(Guid id, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(
+                new CloseRFQCommand(id),
+                cancellationToken);
+
+            return NoContent();
+        }
+
     }
 }
