@@ -1,4 +1,5 @@
-﻿using RFQService.Domain.Entities;
+﻿using RFQService.Domain.Common;
+using RFQService.Domain.Entities;
 
 namespace RFQService.Application.Abstractions.Persistence
 {

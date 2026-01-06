@@ -1,9 +1,11 @@
-﻿using RFQService.Domain.Enums;
+﻿using RFQService.Domain.Entities;
+using RFQService.Domain.Enums;
+using RFQService.Domain.Events;
 using RFQService.Domain.Exceptions;
 
-namespace RFQService.Domain.Entities
+namespace RFQService.Domain.Common
 {
-    public sealed class RFQ
+    public sealed class RFQ : EntityBase
     {
         private readonly List<Bid> _bids = new();
         public IReadOnlyCollection<Bid> Bids => _bids.AsReadOnly();
@@ -50,15 +52,17 @@ namespace RFQService.Domain.Entities
             WinningBidId = bidId;
             Status = RFQStatus.Awarded;
 
-            CloseAfterAward();
+            AddDomainEvent(
+                new RFQAwardedDomainEvent(Id, bidId)
+            );
+
+            CloseAfterAward(); // sets Closed
         }
 
         private void CloseAfterAward()
         {
             Status = RFQStatus.Closed;
         }
-
-
 
         public void Close()
         {
