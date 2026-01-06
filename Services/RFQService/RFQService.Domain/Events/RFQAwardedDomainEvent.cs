@@ -1,7 +1,9 @@
-﻿namespace RFQService.Domain.Events
+﻿using RFQService.Domain.Common;
+
+namespace RFQService.Domain.Events
 {
     public sealed record RFQAwardedDomainEvent(
         Guid RFQId,
         Guid WinningBidId
-    );
+    ) : IDomainEvent;
 }
