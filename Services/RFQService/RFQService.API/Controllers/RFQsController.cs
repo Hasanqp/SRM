@@ -9,6 +9,7 @@ using RFQService.Application.RFQs.Commands.CreateRFQ;
 using RFQService.Application.RFQs.Commands.SendRFQ;
 using RFQService.Application.RFQs.Commands.SubmitBid;
 using RFQService.Application.RFQs.Queries.GetRFQById;
+using RFQService.Application.RFQs.Queries.GetRFQDetails;
 
 namespace RFQService.API.Controllers
 {
@@ -103,5 +104,14 @@ namespace RFQService.API.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetDetails(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(
+                new GetRFQDetailsQuery(id),
+                cancellationToken);
+
+            return Ok(result);
+        }
     }
 }

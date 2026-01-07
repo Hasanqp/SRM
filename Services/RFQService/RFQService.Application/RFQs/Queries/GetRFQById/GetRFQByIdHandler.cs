@@ -4,7 +4,7 @@ using RFQService.Domain.Exceptions;
 
 namespace RFQService.Application.RFQs.Queries.GetRFQById
 {
-    public sealed class GetRFQByIdHandler : IRequestHandler<GetRFQByIdQuery, RFQDetailsResult>
+    public sealed class GetRFQByIdHandler : IRequestHandler<GetRFQByIdQuery, RFQSummaryResult>
     {
         private readonly IRFQRepository _repository;
 
@@ -12,7 +12,7 @@ namespace RFQService.Application.RFQs.Queries.GetRFQById
         {
             _repository = repository;
         }
-        public async Task<RFQDetailsResult> Handle(GetRFQByIdQuery request, CancellationToken cancellationToken)
+        public async Task<RFQSummaryResult> Handle(GetRFQByIdQuery request, CancellationToken cancellationToken)
         {
             var rfq = await _repository.GetByIdAsync(
                 request.RFQId,
@@ -35,7 +35,7 @@ namespace RFQService.Application.RFQs.Queries.GetRFQById
                     b.SubmittedDate))
                 .ToList();
 
-            return new RFQDetailsResult(
+            return new RFQSummaryResult(
                 rfq.Id,
                 rfq.PurchaseRequestId,
                 rfq.Title,

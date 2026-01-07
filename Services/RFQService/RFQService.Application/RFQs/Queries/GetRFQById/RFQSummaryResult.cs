@@ -1,6 +1,6 @@
 ﻿namespace RFQService.Application.RFQs.Queries.GetRFQById
 {
-    public sealed record RFQDetailsResult(
+    public sealed record RFQSummaryResult(
         Guid Id,
         Guid PurcahseRequestId,
         string Title,
