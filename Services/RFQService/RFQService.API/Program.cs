@@ -1,3 +1,4 @@
+using RFQService.API.Middleware;
 using RFQService.Application;
 using RFQService.Infrastructure;
 
@@ -23,6 +24,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Global exception handling
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthorization();
 

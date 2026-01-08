@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RFQService.Application\RFQService.Application.csproj" />
     <ProjectReference Include="..\RFQService.Infrastructure\RFQService.Infrastructure.csproj" />
   </ItemGroup>
