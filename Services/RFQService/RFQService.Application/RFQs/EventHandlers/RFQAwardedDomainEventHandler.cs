@@ -7,28 +7,22 @@ namespace RFQService.Application.RFQs.EventHandlers
 {
     public sealed class RFQAwardedDomainEventHandler : INotificationHandler<RFQAwardedDomainEvent>
     {
-        private readonly IRFQRepository _rFQRepository;
-        private readonly IPurchaseOrderRepository _poRepository;
+        private readonly IPurchaseOrderRepository _repository;
 
-        public RFQAwardedDomainEventHandler(IRFQRepository rFQRepository, IPurchaseOrderRepository poRepository)
+        public RFQAwardedDomainEventHandler(IPurchaseOrderRepository repository)
         {
-            _rFQRepository = rFQRepository;
-            _poRepository = poRepository;
+            _repository = repository;
         }
+
         public async Task Handle(RFQAwardedDomainEvent notification, CancellationToken cancellationToken)
         {
-            var rfq = await _rFQRepository.GetByIdAsync(notification.RFQId, cancellationToken);
-
-            var bid = rfq!.Bids
-                .First(b => b.Id == notification.WinningBidId);
-
             var po = PurchaseOrder.Create(
-                rfq.Id,
-                bid.SupplierId,
-                bid.Amount
-            );
+            notification.RFQId,
+            notification.SupplierId,
+            notification.Amount
+        );
 
-            await _poRepository.AddAsync(po, cancellationToken);
+            await _repository.AddAsync(po, cancellationToken);
         }
     }
 }

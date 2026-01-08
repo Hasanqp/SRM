@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using RFQService.Application.Abstractions.Persistence;
-using RFQService.Domain.Common;
+using RFQService.Domain.Entities;
 
 namespace RFQService.Application.RFQs.Commands.CreateRFQ
 {

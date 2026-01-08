@@ -1,9 +1,9 @@
-﻿using RFQService.Domain.Entities;
+﻿using RFQService.Domain.Common;
 using RFQService.Domain.Enums;
 using RFQService.Domain.Events;
 using RFQService.Domain.Exceptions;
 
-namespace RFQService.Domain.Common
+namespace RFQService.Domain.Entities
 {
     public sealed class RFQ : EntityBase
     {
@@ -44,23 +44,22 @@ namespace RFQService.Domain.Common
         public void Award(Guid bidId)
         {
             if (Status != RFQStatus.SentToVendors)
-                throw new InvalidRFQStateException(Status, RFQStatus.Awarded);
+                throw new InvalidRFQStateException(Status, RFQStatus.Closed);
 
-            if (!Bids.Any(b => b.Id == bidId))
+            var bid = _bids.FirstOrDefault(b => b.Id == bidId);
+            if (bid is null)
                 throw new BidNotFoundException(bidId);
 
             WinningBidId = bidId;
-            Status = RFQStatus.Awarded;
 
             AddDomainEvent(
-                new RFQAwardedDomainEvent(Id, bidId)
+                new RFQAwardedDomainEvent(
+                Id,
+                bid.SupplierId,
+                bid.Amount
+                )
             );
 
-            CloseAfterAward(); // sets Closed
-        }
-
-        private void CloseAfterAward()
-        {
             Status = RFQStatus.Closed;
         }
 

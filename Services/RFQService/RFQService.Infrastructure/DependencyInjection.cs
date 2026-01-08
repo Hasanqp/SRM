@@ -9,6 +9,7 @@ namespace RFQService.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddSingleton<IRFQRepository, InMemoryRFQRepository>();
+            services.AddSingleton<IPurchaseOrderRepository, InMemoryPurchaseOrderRepository>();
 
             return services;
         }

@@ -104,7 +104,7 @@ namespace RFQService.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}/details)")]
         public async Task<IActionResult> GetDetails(Guid id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(
