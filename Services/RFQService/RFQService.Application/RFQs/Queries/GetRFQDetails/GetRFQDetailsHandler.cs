@@ -22,6 +22,18 @@ namespace RFQService.Application.RFQs.Queries.GetRFQDetails
                 throw new NotFoundException("RFQ", request.RFQId);
             }
 
+            var bids = rfq.Bids
+                .Select(b => new BidResult(
+                    b.Id,
+                    b.SupplierId,
+                    b.Amount,
+                    b.SubmittedDate))
+                .ToList();
+
+            var winningBid = rfq.WinningBidId is null
+                ? null
+                : bids.FirstOrDefault(b => b.Id == rfq.WinningBidId);
+
             return new RFQDetailsResult(
                 rfq.Id,
                 rfq.PurchaseRequestId,
@@ -29,12 +41,8 @@ namespace RFQService.Application.RFQs.Queries.GetRFQDetails
                 rfq.Status.ToString(),
                 rfq.CreatedDate,
                 rfq.WinningBidId,
-                rfq.Bids.Select(b =>
-                    new BidResult(
-                        b.Id,
-                        b.SupplierId,
-                        b.Amount))
-                .ToList()
+                winningBid,
+                bids
             );
         }
     }
