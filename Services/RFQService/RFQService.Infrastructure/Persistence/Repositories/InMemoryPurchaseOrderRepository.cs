@@ -12,5 +12,11 @@ namespace RFQService.Infrastructure.Persistence.Repositories
             _store.Add(purchaseOrder);
             return Task.CompletedTask;
         }
+
+        public Task<IReadOnlyCollection<PurchaseOrder>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IReadOnlyCollection<PurchaseOrder>>(
+                _store.AsReadOnly());
+        }
     }
 }
