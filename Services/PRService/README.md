@@ -18,6 +18,6 @@ from creation until approval or rejection.
 - Approved PRs are immutable
 
 ## 📊 State Diagram
-![PR State Diagram](docs/diagrams/pr-state-diagram.png)
+![PR State Diagram](/Services/PRService/PRService.API/docs/diagrams/pr-sequence-diagram.png)
 
 > Source: `docs/diagrams/pr-state-diagram.puml`
