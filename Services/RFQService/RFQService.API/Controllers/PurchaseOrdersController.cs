@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RFQService.Application.PurchaseOrders.Queries.GetPurchaseOrders;
+using RFQService.Application.PurchaseOrders.Queries.GetPurchaseOrdersByRFQId;
 
 namespace RFQService.API.Controllers
 {
@@ -20,6 +21,16 @@ namespace RFQService.API.Controllers
         {
             var result = await _mediator.Send(
                 new GetPurchaseOrdersQuery(),
+                cancellationToken);
+
+            return Ok(result);
+        }
+
+        [HttpGet("by-rfq/{rfqId:guid}")]
+        public async Task<IActionResult> GetByRFQId(Guid rfqId, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(
+                new GetPurchaseOrdersByRFQIdQuery(rfqId),
                 cancellationToken);
 
             return Ok(result);
