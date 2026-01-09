@@ -1,4 +1,4 @@
-@startuml
+﻿@startuml
 actor Buyer
 actor Approver
 participant "PR API" as API

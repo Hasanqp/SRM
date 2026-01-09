@@ -1,21 +1,40 @@
-﻿# PR Service – Business Documentation
+﻿# SRM (Supplier Relationship Management) System
 
 ## 📌 Overview
-The Purchase Request (PR) service manages the lifecycle of purchase requests
-from creation until approval or rejection.
+SRM is a modular procurement system designed using Clean Architecture,
+DDD, CQRS, and event-driven principles.
 
-## 🔄 Business Flow
-1. Buyer creates a Purchase Request (Draft)
-2. Buyer submits the PR
-3. Approver reviews the PR
-4. PR is either Approved or Rejected
+The system is composed of independent services, each owning its own
+bounded context and business rules.
 
-## 🧠 Business Rules
-- PR starts in Draft state
-- Only Draft PRs can be submitted
-- Only Submitted PRs can be approved or rejected
-- Rejection requires a reason
-- Approved PRs are immutable
+---
 
-## 📊 State Diagram
-![PR State Diagram](diagrams/pr-state-diagram.puml)
+## 🧱 Services
+
+### 📝 PRService (Purchase Requests)
+Manages the lifecycle of purchase requests from creation to approval.
+
+➡️ `Services/PRService/README.md`
+
+---
+
+### 📦 RFQService (Requests for Quotation)
+Handles RFQs, supplier bids, awarding, and automatic purchase order creation
+via domain events.
+
+➡️ `Services/RFQService/README.md`
+
+---
+
+### 🛒 POService (Purchase Orders)
+Planned as a future standalone service.
+Currently modeled inside RFQService via domain events.
+
+---
+
+## 🧠 Architecture Highlights
+- Clean Architecture
+- Domain-Driven Design
+- CQRS
+- Event-driven communication
+- Designed for future microservice extraction
