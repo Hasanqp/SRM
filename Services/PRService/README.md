@@ -1,4 +1,4 @@
-﻿# PR Service – Business Documentation
+# PR Service – Business Documentation
 
 ## 📌 Overview
 The Purchase Request (PR) service manages the lifecycle of purchase requests
@@ -18,4 +18,4 @@ from creation until approval or rejection.
 - Approved PRs are immutable
 
 ## 📊 State Diagram
-![PR State Diagram](diagrams/pr-state-diagram.puml)
+![PR State Diagram](diagramspr-state-diagram.puml)
